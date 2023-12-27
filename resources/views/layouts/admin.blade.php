@@ -41,9 +41,24 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav ms-auto">
+                        @guest
+                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('messages.register') }}</a></li>
+                            <li><a class="nav-link" href="{{ route('login') }}">{{ __('messages.login') }}</a></li>
+                        @else
                             <li><a class="nav-link" href="/">ニュース一覧</a></li>
-                            <li><a class="nav-link" href="/">ニュースの新規作成</a></li>
-                            <li><a class="nav-link" href="/">プロフィールの新規登録</a></li>
+                            <li><a class="nav-link" href="{{ route('admin.posts.create') }}">ニュースの新規作成</a></li>
+                            <li><a class="nav-link" href="{{ route('admin.profiles.create')}}">プロフィールの新規登録</a></li>
+                            <li><a class="nav-link" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('messages.logout') }}
+                                </a>
+                            </li>    
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @endguest
                         </ul>
 
                         <!-- Right Side Of Navbar -->
