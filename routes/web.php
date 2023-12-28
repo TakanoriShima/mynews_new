@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PostsController; // 追加
+use App\Http\Controllers\Admin\ProfilesController; // 追加
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +24,10 @@ Route::get('/', function () {
 Route::controller(PostsController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('posts/create', 'create')->name('posts.create');
     Route::post('posts/store', 'store')->name('posts.store');
+    Route::get('posts', 'index')->name('posts.index');
 });
 
 //Route::get('XXX', [AAAController::class, 'bbb']);
-
-use App\Http\Controllers\Admin\ProfilesController;
 
 Route::controller(ProfilesController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('profiles/create', 'create')->name('profiles.create');

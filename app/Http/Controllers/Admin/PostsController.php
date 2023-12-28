@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-// 以下の1行を追記することで、Post Modelが扱えるようになる
 use App\Models\Post;
 
 class PostsController extends Controller
@@ -17,8 +15,6 @@ class PostsController extends Controller
 
     public function store(Request $request)
     {
-        // 以下を追記
-        
         // Validationを行う
         $this->validate($request, Post::$rules);
 
@@ -45,9 +41,21 @@ class PostsController extends Controller
 
         // データベースに保存する
         $post->save();
-        
-        // 追記ここまで
 
         return redirect('admin/posts/create');
+    }    
+    
+    // 以下を追記
+    public function index(Request $request)
+    {
+        $cond_title = $request->cond_title;
+        if ($cond_title != null) {
+            // 検索されたら検索結果を取得する
+            $posts = Post::where('title', $cond_title)->get();
+        } else {
+            // それ以外はすべてのニュースを取得する
+            $posts = Post::all();
+        }
+        return view('admin.posts.index', ['posts' => $posts, 'cond_title' => $cond_title]);
     }    
 }
