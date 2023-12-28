@@ -34,7 +34,8 @@
                                 <th width="10%">ID</th>
                                 <th width="20%">投稿者名</th>
                                 <th width="30%">タイトル</th>
-                                <th width="40%">本文</th>
+                                <th width="30%">本文</th>
+                                <th width="10%">操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,16 @@
                                     <th>{{ $post->user->name }}</th>
                                     <td>{{ Str::limit($post->title, 100) }}</td>
                                     <td>{{ Str::limit($post->body, 250) }}</td>
+                                    <td>
+                                        @if($post->user_id == Auth::id())
+                                        <div>
+                                            <a href="{{ route('admin.posts.edit', ['id' => $post->id]) }}">編集</a>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('admin.posts.destroy', ['id' => $post->id]) }}">削除</a>
+                                        </div>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

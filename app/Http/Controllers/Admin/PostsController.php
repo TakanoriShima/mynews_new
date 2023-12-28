@@ -45,7 +45,6 @@ class PostsController extends Controller
         return redirect('admin/posts/create');
     }    
     
-    // 以下を追記
     public function index(Request $request)
     {
         $cond_title = $request->cond_title;
@@ -58,4 +57,59 @@ class PostsController extends Controller
         }
         return view('admin.posts.index', ['posts' => $posts, 'cond_title' => $cond_title]);
     }    
+    
+    public function edit(Request $request)
+    {
+        // Post Modelからデータを取得する
+        $post = Post::find($request->id);
+        
+        // もし、該当するニュースがない、もしくはそのニュースを作成したユーザーがログインした自分でなければ
+        if(empty($post) || $post->user != \Auth::user()){
+            return redirect('admin/posts');   
+        }
+        return view('admin.posts.edit', ['post' => $post]);
+    }
+
+    public function update(Request $request)
+    {
+        // Validationをかける
+        $this->validate($request, Post::$rules);
+        
+        // Post Modelからデータを取得する
+        $post = Post::find($request->id);
+        
+        // 送信されてきたフォームデータを格納する
+        $title = $request->title;
+        $body = $request->body;
+        $file = $request->file('image');
+        
+        // Postインスタンスにプロパティを設定
+        $post->title = $title;
+        $post->body = $body;
+
+        // フォームから画像が送信されてきたら、保存して、$post->image_path に画像のパスを保存する
+        if ($file !== null) {
+            $path = $file->store('public/image');
+            $post->image_path = basename($path);
+        }
+        
+        // データベースに保存する
+        $post->save();
+        
+        return redirect('admin/posts');
+    }
+    
+    // 以下を追記
+    public function destroy(Request $request)
+    {
+        // 該当するPost Modelを取得
+        $post = Post::find($request->id);
+
+        if($post->user_id == \Auth::id()){
+            // 削除する
+            $post->delete();
+        }
+
+        return redirect('admin/posts');
+    }
 }

@@ -45,9 +45,14 @@
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('messages.register') }}</a></li>
                             <li><a class="nav-link" href="{{ route('login') }}">{{ __('messages.login') }}</a></li>
                         @else
-                            <li><a class="nav-link" href="/">ニュース一覧</a></li>
+                            <li><a class="nav-link" href="{{ route('admin.posts.index' )}}">ニュース一覧</a></li>
                             <li><a class="nav-link" href="/admin/posts/create">ニュースの新規作成</a></li>
+                            <li><a class="nav-link" href="{{ route('admin.profiles.index') }}">プロフィール一覧</a></li>
+                            @if(Auth::user()->profile == null)
                             <li><a class="nav-link" href="{{ route('admin.profiles.create')}}">プロフィールの新規登録</a></li>
+                            @else
+                            <li><a class="nav-link" href="{{ route('admin.profiles.edit', ['id' => Auth::user()->profile->id ]) }}">プロフィールの編集</a></li>
+                            @endif
                             <li><a class="nav-link" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

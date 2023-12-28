@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Profile extends Model
 {
@@ -16,5 +17,12 @@ class Profile extends Model
         'gender' => 'required',
         'hobby' => 'required',
         'introduction' => 'required',
-    );    
+    );   
+    
+    // 以下を追加
+    // このプロフィールを持つユーザを関連付けるメソッド
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    } 
 }

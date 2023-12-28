@@ -22,7 +22,6 @@ class ProfilesController extends Controller
         $gender = $request->gender;
         $hobby = $request->hobby;
         $introduction = $request->introduction;
-        $file = $request->file('image');
 
         // 空のProfileインスタンスを作成
         $profile = new Profile;
@@ -39,13 +38,49 @@ class ProfilesController extends Controller
         return redirect('admin/profiles/create');
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
-        return view('admin.profiles.edit');
+        // Profile Modelからデータを取得する
+        $profile = Profile::find($request->id);
+        // dd(\Auth::user());
+        
+        // もし、該当すプロフィールがない、もしくはそのプロフィールを作成したユーザーがログインした自分でなければ
+        if(empty($profile) || $profile->user->id != \Auth::id()){
+            return redirect('admin/profiles');   
+        }
+        return view('admin.profiles.edit', ['profile' => $profile]);
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        return redirect('admin/profiles/edit');
+       // Validationをかける
+        $this->validate($request, Profile::$rules);
+        
+        // Profile Modelからデータを取得する
+        $profile = Profile::find($request->id);
+        
+        // 送信されてきたフォームデータを格納する
+        $name = $request->name;
+        $gender = $request->gender;
+        $hobby = $request->hobby;
+        $introduction = $request->introduction;
+        
+        // Profileインスタンスにプロパティを設定
+        $profile->name = $name;
+        $profile->gender = $gender;
+        $profile->hobby = $hobby;
+        $profile->introduction = $introduction;
+
+        // データベースに保存する
+        $profile->save();
+        
+        return redirect('admin/profiles');
     }
+    
+    public function index(Request $request)
+    {
+        $profiles = Profile::all();
+
+        return view('admin.profiles.index', ['profiles' => $profiles]);
+    } 
 }
