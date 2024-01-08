@@ -43,6 +43,23 @@
                     <input type="hidden" name="id" value="{{ $profile->id }}">
                     <input type="submit" class="btn btn-primary" value="更新">
                 </form>
+                
+                {{-- 以下を追記 --}}
+                <div class="row mt-5">
+                    <div class="col-md-4 mx-auto">
+                        <h2>編集履歴</h2>
+                        <ul class="list-group">
+                            @if (count($profile->histories) != 0)
+                                @foreach ($profile->histories as $history)
+                                    <li class="list-group-item">{{ $history->edited_at }}</li>
+                                @endforeach
+                            @else
+                                <li class="list-group-item">編集履歴はありません</li>
+                            @endif
+                        </ul>
+                    </div>
+                </div>
+                {{-- 以上を追記 --}}
             </div>
         </div>
     </div>

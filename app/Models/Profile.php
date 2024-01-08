@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
+// 以下を追加
+use App\Models\ProfileHistory;
+
 class Profile extends Model
 {
     use HasFactory;
@@ -25,4 +28,11 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     } 
+    
+    // 以下を追加
+    // このプロフィールの持つ編集履歴を関連付けるメソッド
+    public function histories()
+    {
+        return $this->hasMany(ProfileHistory::class);
+    }
 }

@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 
+// 以下を追記
+use App\Models\ProfileHistory;
+use Carbon\Carbon;
+
 class ProfilesController extends Controller
 {
     public function create()
@@ -73,6 +77,12 @@ class ProfilesController extends Controller
 
         // データベースに保存する
         $profile->save();
+             
+        // 以下を追記     
+        $profile_history = new ProfileHistory;
+        $profile_history->profile_id = $profile->id;
+        $profile_history->edited_at = Carbon::now();
+        $profile_history->save();   
         
         return redirect('admin/profiles');
     }

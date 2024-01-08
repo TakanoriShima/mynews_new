@@ -13,17 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('profile_histories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('name');
-            $table->string('gender');
-            $table->string('hobby');
-            $table->string('introduction');
+            $table->unsignedBigInteger('profile_id');
+            $table->string('edited_at');
             $table->timestamps();
-            
             // 外部キー設定
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('profile_id')->references('id')->on('profiles');
         });
     }
 
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('profile_histories');
     }
 };

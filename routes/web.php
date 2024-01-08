@@ -15,9 +15,7 @@ use App\Http\Controllers\Admin\ProfilesController; // 追加
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PostsController::class, 'index'])->middleware('auth');
 
 
 // 以下追加

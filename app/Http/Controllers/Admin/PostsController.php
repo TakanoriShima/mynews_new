@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\History;
+use Carbon\Carbon;
 
 class PostsController extends Controller
 {
@@ -41,7 +43,7 @@ class PostsController extends Controller
 
         // データベースに保存する
         $post->save();
-
+        
         return redirect('admin/posts/create');
     }    
     
@@ -67,6 +69,7 @@ class PostsController extends Controller
         if(empty($post) || $post->user != \Auth::user()){
             return redirect('admin/posts');   
         }
+
         return view('admin.posts.edit', ['post' => $post]);
     }
 
@@ -95,6 +98,13 @@ class PostsController extends Controller
         
         // データベースに保存する
         $post->save();
+        
+        // 以下を追記
+        $history = new History();
+        $history->post_id = $post->id;
+        $history->edited_at = Carbon::now();
+        $history->save();
+
         
         return redirect('admin/posts');
     }
