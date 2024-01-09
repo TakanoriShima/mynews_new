@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\PostsController; // 追加
-use App\Http\Controllers\Admin\ProfilesController; // 追加
+use App\Http\Controllers\Admin\PostsController; 
+use App\Http\Controllers\Admin\ProfilesController; 
+// 以下を追記
+use App\Http\Controllers\PostsController as PublicPostsController; 
+use App\Http\Controllers\ProfilesController as PublicProfilesController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +18,9 @@ use App\Http\Controllers\Admin\ProfilesController; // 追加
 |
 */
 
-Route::get('/', [PostsController::class, 'index'])->middleware('auth');
+Route::get('/', [PublicPostsController::class, 'index'])->name('posts.index');
+Route::get('profiles', [PublicProfilesController::class, 'index'])->name('profiles.index');
+
 
 
 // 以下追加
@@ -42,3 +47,5 @@ Route::controller(ProfilesController::class)->prefix('admin')->name('admin.')->m
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
